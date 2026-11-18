@@ -1,4 +1,4 @@
-# Proofs for the 21 graded bugs
+# Proofs for the 17 graded bugs
 
 Repository: `getredash/redash` at `f561a53dc55eeb3f20615be951560dc78bb23f4c` (upstream master).
 
@@ -23,28 +23,35 @@ captured output at the pin (`*-current.log`, `pytest-zz_key.log`) and on the lib
 
 | # | Bug | Proof |
 |---|---|---|
-| 1 | `database reencrypt` stops on the first row it cannot decrypt | `pytest/test_key_sqla.py::TestR1ReencryptInvalidToken` |
-| 2 | Search ignores parentheses | `pytest/test_key_sqla.py::TestR2SearchParentheses` |
-| 3 | Search term with `scheme://` returns nothing | `pytest/test_key_sqla.py::TestR3SearchUrl` |
-| 4 | `postgres://` database URL fails at start-up | `pytest/test_key_sqla.py::TestR4PostgresScheme` |
-| 5 | Worker SIGTERM during a query: failed job with empty error | `pytest/test_worker_shutdown.py`, `live/term.sh`, `outputs/sigterm-query-current.log` vs `-pre.log` |
-| 6 | Cancel returns 500 after the worker died | `pytest/test_cancel_after_worker_death.py`, `live/canceldead.sh` + `live/p8.py`, `outputs/canceldead-current.log` vs `-pre.log` |
-| 7 | `users delete --org` ArgumentError | `pytest/test_key_sqla.py::TestO1UsersDeleteOrg` |
-| 8 | `GET /api/queries` with a dashboard API key returns 500 | `pytest/test_key_sqla.py::TestO2ApiKeyQueryList` |
-| 9 | Multi-byte search `id:123` returns 500 | `pytest/test_key_sqla.py::TestO3MultiByteSearchById` |
-| 10 | Data source cannot be deleted after a query was moved | `pytest/test_key_sqla.py::TestO5DeleteDataSourceAfterQueryMoved` |
-| 11 | Pending user with an access permission cannot be deleted | `pytest/test_key_sqla.py::TestO6DeletePendingUserWithPermission` |
-| 12 | Same query runs twice after a stale lock was cleared | `pytest/test_stale_lock_duplicate.py::test_execute_after_cancel_keeps_the_lock`, `live/p7.py`, `outputs/live-stale-lock-current.log` |
-| 13 | "Test Connection" says success for an unreachable data source | `live/p9.py`, `outputs/test-connection-exasol-current.log` |
-| 14 | Cancel after finish turns the job into "Query cancelled by user." | `live/p2.py` part B, `outputs/live-cancel-flows-current.log` |
-| 15 | `GET`/`DELETE /api/jobs/<id>` 500 for an expired job | `pytest/test_job_endpoints.py::test_get_expired_job`, `::test_cancel_expired_job` |
-| 16 | Second cancel returns 500 | `pytest/test_job_endpoints.py::test_cancel_twice` |
-| 17 | CSRF not checked for logged-in session users | `pytest/test_csrf_session.py::test_session_user_post_without_token_is_rejected` |
-| 18 | JSON data source origin check bypass | `pytest/test_json_origin_bypass.py::test_backslash_url_reaches_attacker_with_credentials` |
-| 19 | Numeric NaN in a result fails the job | `pytest/test_pg_nan_serialization.py::test_numeric_nan_crashes_the_job` |
-| 20 | Time with timezone in a result fails the job | `pytest/test_pg_nan_serialization.py::test_timetz_crashes_the_job` |
-| 21 | Blank cell in a CSV/Excel date column fails the query | `pytest/test_csv_nat.py::test_blank_cell_in_date_column_fails_whole_query` (CSV; the Excel runner has the same lines) |
+| 1 | Search ignores parentheses | `pytest/test_key_sqla.py::TestR2SearchParentheses` |
+| 2 | Search term with `scheme://` returns nothing | `pytest/test_key_sqla.py::TestR3SearchUrl` |
+| 3 | `postgres://` database URL fails at start-up | `pytest/test_key_sqla.py::TestR4PostgresScheme` |
+| 4 | Worker SIGTERM during a query: failed job with empty error | `pytest/test_worker_shutdown.py`, `live/term.sh`, `outputs/sigterm-query-current.log` vs `-pre.log` |
+| 5 | Cancel returns 500 after the worker died | `pytest/test_cancel_after_worker_death.py`, `live/canceldead.sh` + `live/p8.py`, `outputs/canceldead-current.log` vs `-pre.log` |
+| 6 | `users delete --org` ArgumentError | `pytest/test_key_sqla.py::TestO1UsersDeleteOrg` |
+| 7 | `GET /api/queries` with a dashboard API key returns 500 | `pytest/test_key_sqla.py::TestO2ApiKeyQueryList` |
+| 8 | Multi-byte search `id:123` returns 500 | `pytest/test_key_sqla.py::TestO3MultiByteSearchById` |
+| 9 | Pending user with an access permission cannot be deleted | `pytest/test_key_sqla.py::TestO6DeletePendingUserWithPermission` |
+| 10 | Same query runs twice after a stale lock was cleared | `pytest/test_stale_lock_duplicate.py::test_execute_after_cancel_keeps_the_lock`, `live/p7.py`, `outputs/live-stale-lock-current.log` |
+| 11 | "Test Connection" says success for an unreachable data source | `live/p9.py`, `outputs/test-connection-exasol-current.log` |
+| 12 | Cancel after finish turns the job into "Query cancelled by user." | `live/p2.py` part B, `outputs/live-cancel-flows-current.log` |
+| 13 | Second cancel returns 500 | `pytest/test_job_endpoints.py::test_cancel_twice` |
+| 14 | CSRF not checked for logged-in session users | `pytest/test_csrf_session.py::test_session_user_post_without_token_is_rejected` |
+| 15 | JSON data source origin check bypass | `pytest/test_json_origin_bypass.py::test_backslash_url_reaches_attacker_with_credentials` |
+| 16 | Time with timezone in a result fails the job | `pytest/test_pg_nan_serialization.py::test_timetz_crashes_the_job` |
+| 17 | Blank cell in a CSV/Excel date column fails the query | `pytest/test_csv_nat.py::test_blank_cell_in_date_column_fails_whole_query` (CSV; the Excel runner has the same lines) |
 
-`test_key_sqla.py` also holds two test classes that are not graded (`TestR5...`: low reach, `TestO4...`: already reported upstream).
+Criteria 1 to 3 passed when the same tests ran with the SQLAlchemy 1.3 package set from before the upgrades. Criteria 4 and 5 pass on the old libraries too (`outputs/pytest-zz_key-pre.log`, `*-pre.log`). Criteria 6 to 17 fail on both.
 
-Criteria 1 to 4 passed when the same tests ran with the SQLAlchemy 1.3 package set from before the upgrades. Criteria 5 and 6 pass on the old libraries too (`outputs/pytest-zz_key-pre.log`, `*-pre.log`). Criteria 7 to 21 fail on both.
+## Not graded
+
+These tests are also in the files but are not graded, because the bug already has a public report upstream or has low reach:
+
+| Test | Why not graded |
+|---|---|
+| `test_key_sqla.py::TestR1ReencryptInvalidToken` | described in open PR #7910 |
+| `test_job_endpoints.py::test_get_expired_job`, `::test_cancel_expired_job` | open issue #7149 |
+| `test_key_sqla.py::TestO5DeleteDataSourceAfterQueryMoved` | open issue #3843 |
+| `test_pg_nan_serialization.py::test_numeric_nan_crashes_the_job` | issue #6992, open PR #7391 |
+| `test_key_sqla.py::TestO4DuplicateGroupDataSource` | open issue #1941 |
+| `test_key_sqla.py::TestR5SearchTriggerMigration` | low reach |
