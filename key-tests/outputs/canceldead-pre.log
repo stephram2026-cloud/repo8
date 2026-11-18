@@ -1,0 +1,16 @@
+started: True
+JOB 1f6c55ac-5a76-4c1b-9f5f-903b0a73b892
+worker container SIGKILLed
+--- 80s after the worker died: user clicks Cancel
+  job status in redis: b'started' | rq:executions:<job> = [] | execution hashes present: []
+  GET    /api/jobs/<id> -> (200, {'job': {'id': '1f6c55ac-5a76-4c1b-9f5f-903b0a73b892', 'updated_at': '2026-11-17T20:50:54.686', 'status': 2, 'error': '', 'result': None, 'query_result_id': None}})
+  DELETE /api/jobs/<id> -> (200, None)
+  GET    /api/jobs/<id> -> (200, {'job': {'id': '1f6c55ac-5a76-4c1b-9f5f-903b0a73b892', 'updated_at': 0, 'status': 4, 'error': 'Query cancelled by user.', 'result': None, 'query_result_id': None}})
+--- 135s after the worker died: user clicks Cancel
+  job status in redis: b'canceled' | rq:executions:<job> = [] | execution hashes present: []
+  GET    /api/jobs/<id> -> (200, {'job': {'id': '1f6c55ac-5a76-4c1b-9f5f-903b0a73b892', 'updated_at': 0, 'status': 4, 'error': 'Query cancelled by user.', 'result': None, 'query_result_id': None}})
+  DELETE /api/jobs/<id> -> (500, {'message': 'Internal Server Error'})
+  GET    /api/jobs/<id> -> (200, {'job': {'id': '1f6c55ac-5a76-4c1b-9f5f-903b0a73b892', 'updated_at': 0, 'status': 4, 'error': 'Query cancelled by user.', 'result': None, 'query_result_id': None}})
+    raise InvalidJobOperation("Cannot cancel already canceled job: {}".format(self.get_id()))
+rq.exceptions.InvalidJobOperation: Cannot cancel already canceled job: 1f6c55ac-5a76-4c1b-9f5f-903b0a73b892
+[2026-11-17 20:53:12,612][PID:7][INFO][metrics] method=DELETE path=/api/jobs/1f6c55ac-5a76-4c1b-9f5f-903b0a73b892 endpoint=job status=500 content_type=application/json content_length=36 duration=5.48 query_count=2 query_duration=1.26

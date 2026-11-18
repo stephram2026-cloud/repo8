@@ -1,0 +1,2 @@
+pg-unreachable       POST /api/data_sources/4/test -> (200, {'message': 'Connection refused\n\tIs the server running on that host and accepting TCP/IP connections?\n', 'ok': False})
+exasol-unreachable   POST /api/data_sources/5/test -> (200, {'message': 'success', 'ok': True})

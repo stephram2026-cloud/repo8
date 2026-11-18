@@ -1,0 +1,18 @@
+(200, {'job': {'id': 'f5ed5e26-0d5e-405e-9dc2-a237a6b2ec68', 'updated_at': '2026-11-17T21:10:28.774Z', 'status': 2, 'error': '', 'result': None, 'query_result_id': None}})
+JOB f5ed5e26-0d5e-405e-9dc2-a237a6b2ec68
+SIGTERM sent to worker
+  [  0.0s] 200 {"job": {"id": "f5ed5e26-0d5e-405e-9dc2-a237a6b2ec68", "updated_at": "2026-11-17T21:10:28.774Z", "status": 2, "error": "", "result": null, "query_result_id": null}}
+  [  5.7s] 200 {"job": {"id": "f5ed5e26-0d5e-405e-9dc2-a237a6b2ec68", "updated_at": 0, "status": 4, "error": "", "result": null, "query_result_id": null}}
+(200, {'job': {'id': 'f5ed5e26-0d5e-405e-9dc2-a237a6b2ec68', 'updated_at': 0, 'status': 4, 'error': '', 'result': None, 'query_result_id': None}})
+({'timeout': '-1', 'status': 'failed', 'ended_at': '2026-11-17T21:10:35.971918Z', 'started_at': '2026-11-17T21:10:28.779741Z'}, 'ttl', 604800)
+locks: {b'query_hash_job:1:b36d9213dc53d1139b118ceed61d1b72': b'f5ed5e26-0d5e-405e-9dc2-a237a6b2ec68'}
+rerun: (200, {'job': {'id': 'e51ef8a4-d831-4d4a-89bc-f90e0b9e7a50', 'updated_at': 0, 'status': 1, 'error': '', 'result': None, 'query_result_id': None}})
+rq_status queues: {"queues": {"default": {"name": "default", "started": [], "queued": 2}, "queries": {"name": "queries", "started": [], "queued": 1}}, "workers": []}
+    select.select([conn.fileno()], [], [], timeout)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/rq/worker/worker_classes.py", line 278, in request_force_stop_sigrtmin
+    raise ShutDownImminentException(f'shut down imminent (signal: {signal_name(signum)})', info)
+rq.exceptions.ShutDownImminentException: shut down imminent (signal: SIGALRM)
+
+[2026-11-17 21:10:35,995][PID:1][INFO][rq.worker] Worker 3c9a8c83f50441afab66c47d2d2f314e: stopping on request
+[2026-11-17 21:10:35,995][PID:1][INFO][rq.worker] Worker 3c9a8c83f50441afab66c47d2d2f314e: unsubscribing from channel rq:pubsub:3c9a8c83f50441afab66c47d2d2f314e

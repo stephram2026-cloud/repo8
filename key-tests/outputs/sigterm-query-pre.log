@@ -1,0 +1,18 @@
+(200, {'job': {'id': '52660200-c733-42b9-a6ca-455744d4db89', 'updated_at': '2026-11-17T21:18:47.751', 'status': 2, 'error': '', 'result': None, 'query_result_id': None}})
+JOB 52660200-c733-42b9-a6ca-455744d4db89
+SIGTERM sent to worker
+  [  0.0s] 200 {"job": {"id": "52660200-c733-42b9-a6ca-455744d4db89", "updated_at": "2026-11-17T21:18:47.751", "status": 2, "error": "", "result": null, "query_result_id": null}}
+  [  5.6s] 200 {"job": {"id": "52660200-c733-42b9-a6ca-455744d4db89", "updated_at": 0, "status": 4, "error": "shut down imminent (signal: SIGALRM)", "result": null, "query_result_id": null}}
+(200, {'job': {'id': '52660200-c733-42b9-a6ca-455744d4db89', 'updated_at': 0, 'status': 4, 'error': 'shut down imminent (signal: SIGALRM)', 'result': None, 'query_result_id': None}})
+({'timeout': '-1', 'status': 'finished', 'ended_at': '2026-11-17T21:18:54.654977Z', 'started_at': '2026-11-17T21:18:47.752564Z'}, 'ttl', 43200)
+locks: {}
+rerun: (200, {'job': {'id': 'ce3bc20b-e518-4c54-b9d7-1d5375cd0203', 'updated_at': 0, 'status': 1, 'error': '', 'result': None, 'query_result_id': None}})
+rq_status queues: {"queues": {"default": {"name": "default", "started": [], "queued": 2}, "queries": {"name": "queries", "started": [], "queued": 1}}, "workers": []}
+  File "/old/rq/worker.py", line 1614, in request_force_stop_sigrtmin
+    raise ShutDownImminentException('shut down imminent (signal: %s)' % signal_name(signum), info)
+rq.exceptions.ShutDownImminentException: shut down imminent (signal: SIGALRM)
+[2026-11-17 21:18:54,653][PID:58][INFO][rq.job.redash.tasks.queries.execution] job.func_name=redash.tasks.queries.execution.execute_query job.id=52660200-c733-42b9-a6ca-455744d4db89 job=execute_query query_hash=b36d9213dc53d1139b118ceed61d1b72 ds_id=1 data_length=None error=[shut down imminent (signal: SIGALRM)]
+[2026-11-17 21:18:54,656][PID:58][INFO][rq.worker] queries: Job OK (52660200-c733-42b9-a6ca-455744d4db89)
+[2026-11-17 21:18:54,656][PID:58][INFO][rq.worker] Result is kept for 43200 seconds
+[2026-11-17 21:18:54,668][PID:1][INFO][rq.worker] Worker rq:worker:cfe25622bf4b41b1af8c9b1e0fe4bac5: stopping on request
+[2026-11-17 21:18:54,668][PID:1][INFO][rq.worker] Unsubscribing from channel rq:pubsub:cfe25622bf4b41b1af8c9b1e0fe4bac5

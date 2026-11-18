@@ -1,0 +1,56 @@
+rq:executions:<job> = [] | execution hashes present: []
+.FFF
+locks after job2 was enqueued: {}
+queue: ['52ac044f-a4ef-4824-8521-5c3ee9c681ba', 'a5d29c60-4934-458e-8e75-ca83ce1608c5']
+F.[2026-11-17 21:22:46,258][PID:60][INFO][xmlschema] Resource 'XMLSchema.xsd' is already loaded
+Traceback (most recent call last):
+rq.exceptions.ShutDownImminentException: shut down imminent (signal: SIGALRM)
+job after worker shutdown: {'id': '8d60bce0-b0ff-44c6-bb53-b3ba6b02e98a', 'updated_at': 0, 'status': 4, 'error': 'shut down imminent (signal: SIGALRM)', 'result': None, 'query_result_id': None}
+locks left behind: []
+.
+=================================== FAILURES ===================================
+___________________ TestJobEndpoints.test_cancel_expired_job ___________________
+self = <tests.zz_key.test_job_endpoints.TestJobEndpoints testMethod=test_cancel_expired_job>
+>       rv = self.make_request("delete", "/api/jobs/{}".format(job_id))
+tests/zz_key/test_job_endpoints.py:34: 
+redash/handlers/query_results.py:434: in delete
+/old/rq/job.py:591: in fetch
+self = CancellableJob('49ba9d5f-bb81-4f12-8168-2600fad332a2', enqueued_at=None)
+>           raise NoSuchJobError('No such job: {0}'.format(self.key))
+E           rq.exceptions.NoSuchJobError: No such job: b'rq:job:49ba9d5f-bb81-4f12-8168-2600fad332a2'
+/old/rq/job.py:993: NoSuchJobError
+______________________ TestJobEndpoints.test_cancel_twice ______________________
+self = <tests.zz_key.test_job_endpoints.TestJobEndpoints testMethod=test_cancel_twice>
+>       rv = self.make_request("delete", "/api/jobs/{}".format(job_id))  # double click on Cancel
+tests/zz_key/test_job_endpoints.py:40: 
+redash/handlers/query_results.py:435: in delete
+redash/tasks/worker.py:30: in cancel
+self = CancellableJob('1f9c1715-b851-42a8-a1f2-172df3f604f8', enqueued_at=datetime.datetime(2026, 11, 17, 21, 22, 40, 936591))
+pipeline = None, enqueue_dependents = False
+>           raise InvalidJobOperation("Cannot cancel already canceled job: {}".format(self.get_id()))
+E           rq.exceptions.InvalidJobOperation: Cannot cancel already canceled job: 1f9c1715-b851-42a8-a1f2-172df3f604f8
+/old/rq/job.py:1134: InvalidJobOperation
+____________________ TestJobEndpoints.test_get_expired_job _____________________
+self = <tests.zz_key.test_job_endpoints.TestJobEndpoints testMethod=test_get_expired_job>
+>       rv = self.make_request("get", "/api/jobs/{}".format(job_id))
+tests/zz_key/test_job_endpoints.py:28: 
+redash/handlers/query_results.py:427: in get
+/old/rq/job.py:591: in fetch
+self = CancellableJob('ea60f70a-3eb0-4c14-bdad-4b30c4267d31', enqueued_at=None)
+>           raise NoSuchJobError('No such job: {0}'.format(self.key))
+E           rq.exceptions.NoSuchJobError: No such job: b'rq:job:ea60f70a-3eb0-4c14-bdad-4b30c4267d31'
+/old/rq/job.py:993: NoSuchJobError
+_______ TestStaleLockDuplicate.test_execute_after_cancel_keeps_the_lock ________
+self = <tests.zz_key.test_stale_lock_duplicate.TestStaleLockDuplicate testMethod=test_execute_after_cancel_keeps_the_lock>
+>       self.assertEqual(job3, job2, "same query was enqueued twice: no lock was written for job2")
+E       AssertionError: 'a5d29c60-4934-458e-8e75-ca83ce1608c5' != '52ac044f-a4ef-4824-8521-5c3ee9c681ba'
+E       - a5d29c60-4934-458e-8e75-ca83ce1608c5
+E       + 52ac044f-a4ef-4824-8521-5c3ee9c681ba
+E        : same query was enqueued twice: no lock was written for job2
+tests/zz_key/test_stale_lock_duplicate.py:57: AssertionError
+=========================== short test summary info ============================
+FAILED tests/zz_key/test_job_endpoints.py::TestJobEndpoints::test_cancel_expired_job
+FAILED tests/zz_key/test_job_endpoints.py::TestJobEndpoints::test_cancel_twice
+FAILED tests/zz_key/test_job_endpoints.py::TestJobEndpoints::test_get_expired_job
+FAILED tests/zz_key/test_stale_lock_duplicate.py::TestStaleLockDuplicate::test_execute_after_cancel_keeps_the_lock
+4 failed, 3 passed in 100.10s (0:01:40)

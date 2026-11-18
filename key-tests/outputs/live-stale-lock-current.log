@@ -1,0 +1,12 @@
+== cancel while queued behind a long query
+2
+b: {'id': '5796301e-3ec6-4e2d-99b7-4d03c1767db7', 'updated_at': 0, 'status': 1, 'error': '', 'result': None, 'query_result_id': None}
+cancel b: (200, None) ({'status': 'canceled', 'ended_at': '', 'started_at': ''}, 'ttl', -1)
+b after cancel: {'id': '5796301e-3ec6-4e2d-99b7-4d03c1767db7', 'updated_at': 0, 'status': 4, 'error': 'Query cancelled by user.', 'result': None, 'query_result_id': None}
+rerun b -> 07af1cda-ae40-4023-91e8-f28ccecfc0be new job
+rerun b again -> ed8c5bee-358f-416d-acaf-b3b0a1cdd06f DUPLICATE of b2
+wait a: 3
+b final: {'id': '5796301e-3ec6-4e2d-99b7-4d03c1767db7', 'updated_at': 0, 'status': 4, 'error': 'Query cancelled by user.', 'result': None, 'query_result_id': None} ({'status': 'canceled', 'ended_at': '', 'started_at': ''}, 'ttl', -1)
+b2 final: {'id': '07af1cda-ae40-4023-91e8-f28ccecfc0be', 'updated_at': 0, 'status': 3, 'error': '', 'result': 12, 'query_result_id': 12}
+b3 final: {'id': 'ed8c5bee-358f-416d-acaf-b3b0a1cdd06f', 'updated_at': 0, 'status': 3, 'error': '', 'result': 13, 'query_result_id': 13}
+{'rq:canceled:queries': 1, 'rq:finished:queries': 3}

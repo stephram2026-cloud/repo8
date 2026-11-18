@@ -1,0 +1,19 @@
+== A: cancel a running query
+(200, {'job': {'id': '9af3c98b-3a99-4555-914c-d77e1f1d8fc5', 'updated_at': 0, 'status': 1, 'error': '', 'result': None, 'query_result_id': None}})
+(200, {'job': {'id': '9af3c98b-3a99-4555-914c-d77e1f1d8fc5', 'updated_at': '2026-11-17T21:09:53.868Z', 'status': 2, 'error': '', 'result': None, 'query_result_id': None}})
+cancel: (200, None) ({'status': 'canceled', 'ended_at': '', 'started_at': '2026-11-17T21:09:53.868900Z'}, 'ttl', -1)
+after cancel: (200, {'job': {'id': '9af3c98b-3a99-4555-914c-d77e1f1d8fc5', 'updated_at': 0, 'status': 4, 'error': 'Query cancelled by user.', 'result': None, 'query_result_id': None}})
+cancel again: (500, {'message': 'Internal Server Error'})
+rerun same query right away: (200, {'job': {'id': 'f73a3a5e-ead4-43ae-9321-ac2c87991646', 'updated_at': 0, 'status': 1, 'error': '', 'result': None, 'query_result_id': None}})
+8s later: (200, {'job': {'id': '9af3c98b-3a99-4555-914c-d77e1f1d8fc5', 'updated_at': 0, 'status': 4, 'error': 'Query cancelled by user.', 'result': None, 'query_result_id': None}}) ({'status': 'finished', 'ended_at': '2026-11-17T21:09:58.876168Z', 'started_at': '2026-11-17T21:09:53.873763Z'}, 'ttl', 43196)
+rq_status: {"default": {"name": "default", "started": [], "queued": 1}, "queries": {"name": "queries", "started": [{"id": "f73a3a5e-ead4-43ae-9321-ac2c87991646", "name": "redash.tasks.queries.execution.execute_query", "origin": "queries", "enqueued_at": "2026-11-17T21:09:54.373Z", "started_at": "2026-11-17T21:09:58.952Z", "meta": {"data_source_id": 1, "org_id": 1, "scheduled": false, "query_id": "adhoc", "user_id": 1}}], "queued": 0}}
+job2 == job1? False (200, {'job': {'id': 'f73a3a5e-ead4-43ae-9321-ac2c87991646', 'updated_at': '2026-11-17T21:09:58.952Z', 'status': 2, 'error': '', 'result': None, 'query_result_id': None}})
+cancel job2: (200, None)
+(200, {'job': {'id': 'f73a3a5e-ead4-43ae-9321-ac2c87991646', 'updated_at': 0, 'status': 4, 'error': 'Query cancelled by user.', 'result': None, 'query_result_id': None}}) ({'status': 'finished', 'ended_at': '2026-11-17T21:10:03.961244Z', 'started_at': '2026-11-17T21:09:58.956177Z'}, 'ttl', 43195)
+pg activity: {'job': {'id': '00ab8ec7-5a01-4a5a-8eb3-055928e73580', 'updated_at': 0, 'status': 1, 'error': '', 'result': None, 'query_result_id': None}}
+== B: cancel a finished query
+(200, {'job': {'id': '41f245d1-2db4-4f15-ab61-cc59a63e4981', 'updated_at': 0, 'status': 3, 'error': '', 'result': 15, 'query_result_id': 15}})
+cancel finished: (200, None)
+(200, {'job': {'id': '41f245d1-2db4-4f15-ab61-cc59a63e4981', 'updated_at': 0, 'status': 4, 'error': 'Query cancelled by user.', 'result': None, 'query_result_id': None}}) ({'status': 'canceled', 'ended_at': '2026-11-17T21:10:09.772820Z', 'started_at': '2026-11-17T21:10:09.709168Z'}, 'ttl', 43200)
+rerun: (200, {'job': {'id': 'd84e3d2e-7913-438f-b04b-db777194d8d3', 'updated_at': 0, 'status': 1, 'error': '', 'result': None, 'query_result_id': None}})
+(200, {'job': {'id': 'd84e3d2e-7913-438f-b04b-db777194d8d3', 'updated_at': 0, 'status': 3, 'error': '', 'result': 16, 'query_result_id': 16}})

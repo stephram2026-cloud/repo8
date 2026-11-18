@@ -1,0 +1,16 @@
+started: True
+JOB bf9b6263-2b87-4a8d-885a-59b79b2fcea2
+worker container SIGKILLed
+--- 80s after the worker died: user clicks Cancel
+  job status in redis: b'started' | rq:executions:<job> = ['65d34403011d487197525094f07fbedb'] | execution hashes present: [False]
+  GET    /api/jobs/<id> -> (200, {'job': {'id': 'bf9b6263-2b87-4a8d-885a-59b79b2fcea2', 'updated_at': '2026-11-17T20:50:54.826Z', 'status': 2, 'error': '', 'result': None, 'query_result_id': None}})
+  DELETE /api/jobs/<id> -> (500, {'message': 'Internal Server Error'})
+  GET    /api/jobs/<id> -> (200, {'job': {'id': 'bf9b6263-2b87-4a8d-885a-59b79b2fcea2', 'updated_at': '2026-11-17T20:50:54.826Z', 'status': 4, 'error': 'Query cancelled by user.', 'result': None, 'query_result_id': None}})
+--- 135s after the worker died: user clicks Cancel
+  job status in redis: b'started' | rq:executions:<job> = [] | execution hashes present: []
+  GET    /api/jobs/<id> -> (200, {'job': {'id': 'bf9b6263-2b87-4a8d-885a-59b79b2fcea2', 'updated_at': '2026-11-17T20:50:54.826Z', 'status': 4, 'error': 'Query cancelled by user.', 'result': None, 'query_result_id': None}})
+  DELETE /api/jobs/<id> -> (200, None)
+  GET    /api/jobs/<id> -> (200, {'job': {'id': 'bf9b6263-2b87-4a8d-885a-59b79b2fcea2', 'updated_at': 0, 'status': 4, 'error': 'Query cancelled by user.', 'result': None, 'query_result_id': None}})
+    raise ValueError(f'Execution {self.id} not found in Redis')
+ValueError: Execution 65d34403011d487197525094f07fbedb not found in Redis
+[2026-11-17 20:52:18,053][PID:7][INFO][metrics] method=DELETE path=/api/jobs/bf9b6263-2b87-4a8d-885a-59b79b2fcea2 endpoint=job status=500 content_type=application/json content_length=36 duration=8.21 query_count=2 query_duration=1.51

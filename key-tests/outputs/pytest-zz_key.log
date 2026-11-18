@@ -1,0 +1,67 @@
+rq:executions:<job> = ['c5596bd02eec4e80aac85c43678be4a4'] | execution hashes present: [False]
+FFFF
+locks after job2 was enqueued: {}
+queue: ['6c6f13ba-3d08-4fb5-aafe-80aa645a0a98', '50fe4d9f-26e6-41de-9649-de54497b9e9e']
+F.[2026-11-17 21:20:54,413][PID:60][INFO][xmlschema] Resource 'XMLSchema.xsd' is already loaded
+Traceback (most recent call last):
+rq.exceptions.ShutDownImminentException: shut down imminent (signal: SIGALRM)
+job after worker shutdown: {'id': 'aed211c5-b728-47dc-bcc6-403495097a6d', 'updated_at': 0, 'status': 4, 'error': '', 'result': None, 'query_result_id': None}
+locks left behind: ['query_hash_job:1:2be6891d2abdeafcf8a6d2144aaf7c51']
+F
+=================================== FAILURES ===================================
+_________ TestCancelAfterWorkerDeath.test_cancel_query_of_dead_worker __________
+self = <tests.zz_key.test_cancel_after_worker_death.TestCancelAfterWorkerDeath testMethod=test_cancel_query_of_dead_worker>
+>       rv = self.make_request("delete", "/api/jobs/" + job_id)  # user presses Cancel on the stuck query
+tests/zz_key/test_cancel_after_worker_death.py:81: 
+redash/handlers/query_results.py:435: in delete
+redash/tasks/worker.py:31: in cancel
+self = <rq.executions.Execution object at 0x710118a16f90>
+>           raise ValueError(f'Execution {self.id} not found in Redis')
+E           ValueError: Execution c5596bd02eec4e80aac85c43678be4a4 not found in Redis
+___________________ TestJobEndpoints.test_cancel_expired_job ___________________
+self = <tests.zz_key.test_job_endpoints.TestJobEndpoints testMethod=test_cancel_expired_job>
+>       rv = self.make_request("delete", "/api/jobs/{}".format(job_id))
+tests/zz_key/test_job_endpoints.py:34: 
+redash/handlers/query_results.py:434: in delete
+self = CancellableJob('e562c5e2-afbe-45ef-805b-6b8dc23522e6', enqueued_at=None)
+>           raise NoSuchJobError(f'No such job: {self.key}')
+E           rq.exceptions.NoSuchJobError: No such job: rq:job:e562c5e2-afbe-45ef-805b-6b8dc23522e6
+______________________ TestJobEndpoints.test_cancel_twice ______________________
+self = <tests.zz_key.test_job_endpoints.TestJobEndpoints testMethod=test_cancel_twice>
+>       rv = self.make_request("delete", "/api/jobs/{}".format(job_id))  # double click on Cancel
+tests/zz_key/test_job_endpoints.py:40: 
+redash/handlers/query_results.py:435: in delete
+redash/tasks/worker.py:31: in cancel
+self = CancellableJob('2e8efe60-5959-49de-9865-0ca147afc472', enqueued_at=datetime.datetime(2026, 11, 17, 21, 20, 49, 293391, tzinfo=datetime.timezone.utc))
+pipeline = None, enqueue_dependents = False, remove_from_dependencies = False
+>           raise InvalidJobOperation(f'Cannot cancel already canceled job: {self.id}')
+E           rq.exceptions.InvalidJobOperation: Cannot cancel already canceled job: 2e8efe60-5959-49de-9865-0ca147afc472
+____________________ TestJobEndpoints.test_get_expired_job _____________________
+self = <tests.zz_key.test_job_endpoints.TestJobEndpoints testMethod=test_get_expired_job>
+>       rv = self.make_request("get", "/api/jobs/{}".format(job_id))
+tests/zz_key/test_job_endpoints.py:28: 
+redash/handlers/query_results.py:427: in get
+self = CancellableJob('c51f18c5-4441-414a-b872-693f8ed720b3', enqueued_at=None)
+>           raise NoSuchJobError(f'No such job: {self.key}')
+E           rq.exceptions.NoSuchJobError: No such job: rq:job:c51f18c5-4441-414a-b872-693f8ed720b3
+_______ TestStaleLockDuplicate.test_execute_after_cancel_keeps_the_lock ________
+self = <tests.zz_key.test_stale_lock_duplicate.TestStaleLockDuplicate testMethod=test_execute_after_cancel_keeps_the_lock>
+>       self.assertEqual(job3, job2, "same query was enqueued twice: no lock was written for job2")
+E       AssertionError: '50fe4d9f-26e6-41de-9649-de54497b9e9e' != '6c6f13ba-3d08-4fb5-aafe-80aa645a0a98'
+E       - 50fe4d9f-26e6-41de-9649-de54497b9e9e
+E       + 6c6f13ba-3d08-4fb5-aafe-80aa645a0a98
+E        : same query was enqueued twice: no lock was written for job2
+tests/zz_key/test_stale_lock_duplicate.py:57: AssertionError
+_________ TestWorkerShutdown.test_query_interrupted_by_worker_shutdown _________
+self = <tests.zz_key.test_worker_shutdown.TestWorkerShutdown testMethod=test_query_interrupted_by_worker_shutdown>
+>       self.assertNotEqual(job["error"], "", "the user gets a failed query with an empty error message")
+E       AssertionError: '' == '' : the user gets a failed query with an empty error message
+tests/zz_key/test_worker_shutdown.py:67: AssertionError
+=========================== short test summary info ============================
+FAILED tests/zz_key/test_cancel_after_worker_death.py::TestCancelAfterWorkerDeath::test_cancel_query_of_dead_worker
+FAILED tests/zz_key/test_job_endpoints.py::TestJobEndpoints::test_cancel_expired_job
+FAILED tests/zz_key/test_job_endpoints.py::TestJobEndpoints::test_cancel_twice
+FAILED tests/zz_key/test_job_endpoints.py::TestJobEndpoints::test_get_expired_job
+FAILED tests/zz_key/test_stale_lock_duplicate.py::TestStaleLockDuplicate::test_execute_after_cancel_keeps_the_lock
+FAILED tests/zz_key/test_worker_shutdown.py::TestWorkerShutdown::test_query_interrupted_by_worker_shutdown
+6 failed, 1 passed in 100.02s (0:01:40)
